@@ -38,7 +38,6 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
   color: #373b64;
-  height: 100%;
 }
 
 a {
@@ -75,6 +74,19 @@ button {
 button:focus {
   outline: 1px dotted;
   outline: 5px auto -webkit-focus-ring-color;
+}
+
+/* glass-morphism */
+.glass {
+  background: hsla(0, 0%, 100%, 0.4);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 1px solid hsla(0, 0%, 100%, 0.2);
+}
+
+.glass:hover {
+  background: hsla(0, 0%, 100%, 0.7);
+  border: 1px solid #fff;
 }
 
 /* @media (prefers-color-scheme: dark) {

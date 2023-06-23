@@ -3,8 +3,14 @@ import styles from "../styles/Home.module.css";
 import Banner from "../components/Banner";
 import { useCallback } from "react";
 import Image from "next/image";
+import Card from "../components/Card";
+import coffeeStoresData from "../data/coffee-stores.json";
 
-const Home = () => {
+export const getStaticProps = async () => {
+  return { props: { coffeeStores: coffeeStoresData } };
+};
+
+const Home = (props) => {
   const handleClick = useCallback(() => {
     alert("hi");
   }, []);
@@ -27,6 +33,21 @@ const Home = () => {
             alt=""
           />
         </div>
+        {props.coffeeStores.length > 0 && (
+          <>
+            <h2 className={styles.heading2}>Toronto Stores</h2>
+            <div className={styles.cardLayout}>
+              {props.coffeeStores.map((store) => (
+                <Card
+                  key={store.id}
+                  href={`/coffee-store/${store.id}`}
+                  name={store.name}
+                  imgUrl={store.imgUrl}
+                />
+              ))}
+            </div>
+          </>
+        )}
       </main>
     </div>
   );
