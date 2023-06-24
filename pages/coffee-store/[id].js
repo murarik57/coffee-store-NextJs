@@ -38,11 +38,13 @@ export const getStaticProps = async (staticProps) => {
   const params = staticProps.params;
 
   const coffeeStores = await fetchCoffeeStores();
+
+  const findCoffeeStoreById = coffeeStores.find((coffeeStore) => {
+    return coffeeStore.fsq_id.toString() === params.id;
+  });
   return {
     props: {
-      coffeeStore: coffeeStores.find((coffeeStore) => {
-        return coffeeStore.fsq_id.toString() === params.id; //dynamic id
-      }),
+      coffeeStore: findCoffeeStoreById ? findCoffeeStoreById : {},
     },
   };
 };
@@ -56,9 +58,9 @@ const CoffeeStore = (props) => {
   }, []);
 
   if (router.isFallback) {
-    return <div>Loading</div>;
+    return <div>Loading ...</div>;
   }
-  const { location, name, imgUrl } = props.coffeeStore;
+  const { location = {}, name, imgUrl } = props.coffeeStore;
 
   return (
     <div className={styles.layout}>

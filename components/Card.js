@@ -9,7 +9,7 @@ const Card = (props) => {
       <a className={styles.cardLink}>
         <div className={`${styles.container} glass`}>
           <div className={styles.cardHeaderWrapper}>
-            <h2 className={styles.cardHeader}>{props.name}</h2>
+            <h2 className={styles.cardHeader}>{props.name} →</h2>
           </div>
           <div className={styles.cardImageWrapper}>
             <Image
