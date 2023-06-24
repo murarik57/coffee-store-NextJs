@@ -1,11 +1,12 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import Banner from "../components/Banner";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import Card from "../components/Card";
 import { fetchCoffeeStores } from "../lib/coffee-store";
 import useTrackLocation from "../hooks/useTrackLocation";
+import { ACTION_TYPES, StoreContext } from "../store/store-context";
 
 export const getStaticProps = async () => {
   const coffeeStores = await fetchCoffeeStores();
@@ -13,10 +14,10 @@ export const getStaticProps = async () => {
 };
 
 const Home = (props) => {
-  const { latLong, handleTrackLocation, isFindingLocation } =
-    useTrackLocation();
+  const { handleTrackLocation, isFindingLocation } = useTrackLocation();
 
-  const [fetchedCoffeeStores, setFetchedCoffeeStores] = useState([]);
+  // const [fetchedCoffeeStores, setFetchedCoffeeStores] = useState([]);
+  const { state, dispatch } = useContext(StoreContext);
 
   const handleClick = useCallback(() => {
     handleTrackLocation();
@@ -24,16 +25,24 @@ const Home = (props) => {
 
   useEffect(() => {
     (async () => {
-      if (latLong) {
+      if (state.latLong) {
         try {
-          const fetchedCoffeeStores = await fetchCoffeeStores(latLong, 30);
-          setFetchedCoffeeStores(fetchedCoffeeStores);
+          const fetchedCoffeeStores = await fetchCoffeeStores(
+            state.latLong,
+            30
+          );
+          dispatch({
+            type: ACTION_TYPES.SET_COFFEE_STORES,
+            payload: { coffeeStores: fetchedCoffeeStores },
+          });
+
+          // setFetchedCoffeeStores(fetchedCoffeeStores);
         } catch (error) {
           console.log(error);
         }
       }
     })();
-  }, [latLong]);
+  }, [dispatch, state.latLong]);
 
   return (
     <div className={styles.container}>
@@ -56,11 +65,11 @@ const Home = (props) => {
             alt=""
           />
         </div>
-        {fetchedCoffeeStores.length > 0 && (
+        {state.coffeeStores.length > 0 && (
           <div className={styles.sectionWrapper}>
             <h2 className={styles.heading2}>Stores Near Me</h2>
             <div className={styles.cardLayout}>
-              {fetchedCoffeeStores.map((store) => (
+              {state.coffeeStores.map((store) => (
                 <Card
                   key={store.fsq_id}
                   href={`/coffee-store/${store.fsq_id}`}

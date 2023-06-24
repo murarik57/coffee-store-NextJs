@@ -49,7 +49,7 @@ export const getStaticProps = async (staticProps) => {
   };
 };
 
-const CoffeeStore = (props) => {
+const CoffeeStore = (initialProps) => {
   const router = useRouter();
   const id = router.query.id;
 
@@ -60,7 +60,7 @@ const CoffeeStore = (props) => {
   if (router.isFallback) {
     return <div>Loading ...</div>;
   }
-  const { location = {}, name, imgUrl } = props.coffeeStore;
+  const { location = {}, name, imgUrl } = initialProps.coffeeStore;
 
   return (
     <div className={styles.layout}>
