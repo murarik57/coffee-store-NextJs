@@ -5,9 +5,11 @@ import { useCallback } from "react";
 import Image from "next/image";
 import Card from "../components/Card";
 import coffeeStoresData from "../data/coffee-stores.json";
+import { fetchCoffeeStores } from "../lib/coffee-store";
 
 export const getStaticProps = async () => {
-  return { props: { coffeeStores: coffeeStoresData } };
+  const coffeeStores = await fetchCoffeeStores();
+  return { props: { coffeeStores } };
 };
 
 const Home = (props) => {
@@ -35,14 +37,17 @@ const Home = (props) => {
         </div>
         {props.coffeeStores.length > 0 && (
           <>
-            <h2 className={styles.heading2}>Toronto Stores</h2>
+            <h2 className={styles.heading2}>Delhi Stores</h2>
             <div className={styles.cardLayout}>
               {props.coffeeStores.map((store) => (
                 <Card
-                  key={store.id}
-                  href={`/coffee-store/${store.id}`}
+                  key={store.fsq_id}
+                  href={`/coffee-store/${store.fsq_id}`}
                   name={store.name}
-                  imgUrl={store.imgUrl}
+                  imgUrl={
+                    store.imgUrl ||
+                    "https://images.unsplash.com/photo-1504753793650-d4a2b783c15e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80"
+                  }
                 />
               ))}
             </div>
